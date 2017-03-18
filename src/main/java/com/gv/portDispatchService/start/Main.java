@@ -1,4 +1,4 @@
-package com.gv.portDispatchService.gui.start;
+package com.gv.portDispatchService.start;
 
 import com.gv.portDispatchService.gui.swt.PortWindow;
 
