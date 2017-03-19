@@ -1,5 +1,6 @@
 package com.gv.port.database;
 
+import com.gv.port.logging.PortLogger;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -41,7 +42,7 @@ public class DatabaseConnectionManager {
             connection = DriverManager.getConnection(dbUrl + dbName +
                     "?autoReconnect=true&useSSL=false", dbUser, dbPassword);
         } catch (SQLException e) {
-            //AppLogger.getLogger().error(e.getMessage());
+            PortLogger.getLogger().error(e.getMessage());
         } finally {
             return connection;
         }
