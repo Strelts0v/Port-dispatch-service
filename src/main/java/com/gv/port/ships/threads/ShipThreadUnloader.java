@@ -20,20 +20,21 @@ public class ShipThreadUnloader extends Ship implements Runnable {
         try {
             dock = Port.getInstance().getDock(MAX_WAITING_TIME);
             setShipIdToPortLogger(dock);
+            PortLogger.addLogInfo(new Date().toString() + ". Ship #" + this.shipId + " has been taken dock #" + dock.getDockId());
             Thread.sleep(accessTime * MILLIS_IN_SECONDS);
             if(dock.unloadSupplies(this.unloadSupplyCount)){
                 PortLogger.addLogInfo(new Date().toString() + ". Ship #" + this.shipId +
-                        " has been successfully unloaded " + this.unloadSupplyCount + " to port storage.");
+                        " has been successfully unloaded " + this.unloadSupplyCount);
             } else {
                 PortLogger.addLogInfo("Error! " + new Date().toString() + ". Ship #" + this.shipId +
-                        " hasn't been unloaded " + this.unloadSupplyCount + " to port storage.");
+                        " hasn't been unloaded " + this.unloadSupplyCount);
             }
         } catch (DockException | InterruptedException e){
             PortLogger.getLogger().error(e);
         } finally {
             resetShipIdFromPortLogger(dock);
             Port.getInstance().returnDock(dock);
-
+            PortLogger.addLogInfo(new Date().toString() + ". Ship #" + this.shipId + " has been returned dock #" + dock.getDockId());
         }
     }
 }
