@@ -6,6 +6,7 @@ import com.gv.port.portStructure.Port;
 import com.gv.port.ships.Ship;
 import com.gv.port.ships.ShipManager;
 import com.gv.port.start.Main;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
@@ -19,6 +20,8 @@ import java.util.Queue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PortWindow {
 
@@ -31,6 +34,8 @@ public class PortWindow {
     public Button btnDeleteShip;
 
     public Button btnStartPort;
+
+    public Button btnExit;
 
     public Label lblDock_1;
 
@@ -58,6 +63,8 @@ public class PortWindow {
 
     public Label lblShipInDock_3;
 
+    public Label lblPortDispatchService;
+
     private final static int LOGGING_FREQUENCY = 4;
 
     /**
@@ -68,6 +75,9 @@ public class PortWindow {
         createContents();
         shell.open();
         shell.layout();
+        Image small = new Image(display, "G:\\Archive\\desktop\\Port-dispatch-service\\src\\main\\resources\\pictures\\favicon.jpg");
+        shell.setImage(small);
+
         while (!shell.isDisposed()) {
             if (!display.readAndDispatch()) {
                 display.sleep();
@@ -89,7 +99,8 @@ public class PortWindow {
         btnAddShip = new Button(shell, SWT.NONE);
         btnAddShip.addListener(SWT.Selection, new Listener() {
             public void handleEvent(Event event) {
-                //add ship
+                ShipAddingWindow shipAddingWindow = new ShipAddingWindow();
+                shipAddingWindow.open();
             }
         });
         FormData fd_btnAddShip = new FormData();
@@ -101,7 +112,15 @@ public class PortWindow {
         fd_btnAddShip.bottom = new FormAttachment(100, -314);
         btnDeleteShip.addListener(SWT.Selection, new Listener() {
             public void handleEvent(Event event) {
-                //delete ship
+                String[] ships = shipList.getSelection();
+                for(int i = 0; i < ships.length; i++){
+                    shipList.remove(ships[i]);
+                    Pattern pattern = Pattern.compile("[-]?[0-9]+(.[0-9]+)?");
+                    Matcher matcher = pattern.matcher(ships[i]);
+                    while (matcher.find()) {
+                        ShipManager.getInstance().deleteShip(Integer.parseInt(matcher.group()));
+                    }
+                }
             }
         });
         FormData fd_btnDeleteShip = new FormData();
@@ -258,15 +277,48 @@ public class PortWindow {
         fd_btnStartPort.right = new FormAttachment(btnAddShip, 0, SWT.RIGHT);
         btnStartPort.setLayoutData(fd_btnStartPort);
 
+        btnExit = new Button(shell, SWT.NONE);
+        FormData fd_btnExit = new FormData();
+        fd_btnExit.right = new FormAttachment(btnAddShip, 0, SWT.RIGHT);
+        fd_btnExit.bottom = new FormAttachment(100, -10);
+        fd_btnExit.left = new FormAttachment(0, 10);
+        btnExit.setLayoutData(fd_btnExit);
+        btnExit.setText("Exit");
+        btnExit.addListener(SWT.Selection, new Listener() {
+            public void handleEvent(Event event) {
+                shell.close();
+            }
+        });
+
+        lblPortDispatchService = new Label(shell, SWT.NONE);
+        lblPortDispatchService.setBackground(SWTResourceManager.getColor(152, 251, 152));
+        lblPortDispatchService.setFont(SWTResourceManager.getFont("Segoe Print", 14, SWT.BOLD));
+        lblPortDispatchService.setAlignment(SWT.CENTER);
+        FormData fd_lblPortDispatchService = new FormData();
+        fd_lblPortDispatchService.bottom = new FormAttachment(lblStorageState, -37);
+        fd_lblPortDispatchService.top = new FormAttachment(0);
+        fd_lblPortDispatchService.right = new FormAttachment(btnAddShip, 0, SWT.RIGHT);
+        fd_lblPortDispatchService.left = new FormAttachment(0, 10);
+        lblPortDispatchService.setLayoutData(fd_lblPortDispatchService);
+        lblPortDispatchService.setText("Port dispatch service");
+
         initializeContent();
     }
 
-    private void initializeContent(){
+    public void initializeContent(){
         ShipManager.getInstance().initializeShipsQueue();
         Queue<Ship> shipQueue =  ShipManager.getInstance().getShipsQueue();
         for(Ship ship : shipQueue){
             shipList.add("Ship #" + ship.getShipId() + ". Priority: " + ship.getPriorityText());
         }
         supplyCount.setText(new Integer(Port.getInstance().getStorage().getSupplyCount()).toString());
+    }
+
+    public void updateShipQueue(){
+        shipList.removeAll();
+        Queue<Ship> shipQueue =  ShipManager.getInstance().getShipsQueue();
+        for(Ship ship : shipQueue){
+            shipList.add("Ship #" + ship.getShipId() + ". Priority: " + ship.getPriorityText());
+        }
     }
 }

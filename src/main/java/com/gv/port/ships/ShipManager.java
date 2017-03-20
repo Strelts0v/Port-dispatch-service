@@ -45,6 +45,15 @@ public class ShipManager {
         }
     }
 
+    public void deleteShip(int shipId){
+        ShipDaoSingleton.getInstance().deleteShipFromQueue(shipId);
+        for (Ship ship : shipsQueue){
+            if(ship.shipId == shipId){
+                shipsQueue.remove(ship);
+            }
+        }
+    }
+
     public void lunchShipsInQueue(){
         while(!shipsQueue.isEmpty()){
             Ship ship = shipsQueue.poll();

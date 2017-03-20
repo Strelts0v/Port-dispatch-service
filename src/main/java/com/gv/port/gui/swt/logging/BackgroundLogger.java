@@ -26,7 +26,7 @@ public class BackgroundLogger implements Runnable{
 
                 Main.getPortWindow().lblShipInDock_3.setText(PortLogger.getShipIdInThirdDock());
                 int count = Main.getPortWindow().shipList.getItemCount();
-                while(--count >= 0) {
+                for(int i = 0; i < count && i < 3; i++) {
                     Main.getPortWindow().shipList.remove(0);
                     Main.getPortWindow().shipList.redraw();
                 }
