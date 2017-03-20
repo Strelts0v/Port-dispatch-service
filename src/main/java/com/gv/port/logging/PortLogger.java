@@ -13,6 +13,12 @@ public class PortLogger {
         return log;
     }
 
+    public static String shipIdInFirstDock;
+
+    public static String shipIdInSecondDock;
+
+    public static String shipIdInThirdDock;
+
     public static void addLogInfo(String message){
         try {
             lastLogInfo.put(message);
@@ -29,5 +35,29 @@ public class PortLogger {
             log.info(logInfo[i]);
         }
         return logInfo;
+    }
+
+    public static String getShipIdInFirstDock() {
+        return shipIdInFirstDock;
+    }
+
+    public static void setShipIdInFirstDock(String shipIdInFirstDock) {
+        PortLogger.shipIdInFirstDock = shipIdInFirstDock;
+    }
+
+    public static String getShipIdInSecondDock() {
+        return shipIdInSecondDock;
+    }
+
+    public static void setShipIdInSecondDock(String shipIdInSecondDock) {
+        PortLogger.shipIdInSecondDock = shipIdInSecondDock;
+    }
+
+    public static String getShipIdInThirdDock() {
+        return shipIdInThirdDock;
+    }
+
+    public static void setShipIdInThirdDock(String shipIdInThirdDock) {
+        PortLogger.shipIdInThirdDock = shipIdInThirdDock;
     }
 }

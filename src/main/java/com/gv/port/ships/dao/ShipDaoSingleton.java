@@ -48,7 +48,6 @@ public class ShipDaoSingleton implements ShipDao{
                 int supplyId = rS.getInt(SHIP_SUPPLY_ID_COLUMN_NAME);
                 int[] supplies = getSuppliesCount(supplyId);
                 actualShips.add(new Ship(shipId, accessTime, supplies[0], supplies[1], priority));
-                deleteShipFromQueue(shipId);
             }
         } catch (SQLException e){
             PortLogger.getLogger().error(e);
@@ -94,7 +93,7 @@ public class ShipDaoSingleton implements ShipDao{
         try {
             Connection connection = DatabaseConnectionManager.getDatabaseConnection();
             PreparedStatement stmt = connection.prepareStatement("select download_count," +
-                    " unload_count count from supplies where supply_id = ?");
+                    " unload_count from supplies where supply_id = ?");
             stmt.setInt(1, supplyId);
             ResultSet rS = stmt.executeQuery();
             rS.next();
