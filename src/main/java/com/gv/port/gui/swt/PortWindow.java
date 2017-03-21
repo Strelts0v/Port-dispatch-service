@@ -1,11 +1,9 @@
 package com.gv.port.gui.swt;
 
 import com.gv.port.gui.swt.logging.BackgroundLogger;
-import com.gv.port.logging.PortLogger;
 import com.gv.port.portStructure.Port;
 import com.gv.port.ships.Ship;
 import com.gv.port.ships.ShipManager;
-import com.gv.port.start.Main;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.SWT;
@@ -13,9 +11,6 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-
 import java.util.Queue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -25,46 +20,68 @@ import java.util.regex.Pattern;
 
 public class PortWindow {
 
+    /** object of Shell from swt library, that represent main window of gui*/
     protected Shell shell;
 
+    /** object of Display from swt library */
     public Display display;
 
+    /** object of Button, that initiate adding new ship to remote
+     * data storage and to the ship queue */
     public Button btnAddShip;
 
+    /** object of Button, that initiate deleting selected ship from queue */
     public Button btnDeleteShip;
 
+    /** object of Button, that start work of port, lunch ships */
     public Button btnStartPort;
 
+    /** object of Button, that initiate exit from program */
     public Button btnExit;
 
+    /** object of Label that represent header of dock 1 */
     public Label lblDock_1;
 
+    /** object of Label that represent header of dock 2 */
     public Label lblDock_2;
 
+    /** object of Label that represent header of dock 3 */
     public Label lblDock_3;
 
+    /** object designed to represent log info of port */
     public StyledText logInfo;
 
+    /** object of Label that represent header of ships queue */
     public Label lblShipsQueue;
 
+    /** object that represents ships in queue */
     public List shipList;
 
+    /** object of Label that represent header of log info */
     public Label lblLogInformation;
 
+    /** object of Label that represent header of Storage state */
     public Label lblStorageState;
 
+    /** object of Label that represent header of current supply count from storage of port */
     public Label lblSupplyCount;
 
+    /** object of Label that represent current supply count from storage of port */
     public Label supplyCount;
 
+    /** object that contain ship that at this moment hold dock 1 or that dock 1 is empty */
     public Label lblShipInDock_1;
 
+    /** object that contain ship that at this moment hold dock 2 or that dock 2 is empty */
     public Label lblShipInDock_2;
 
+    /** object that contain ship that at this moment hold dock 3 or that dock 3 is empty */
     public Label lblShipInDock_3;
 
+    /** window main header */
     public Label lblPortDispatchService;
 
+    /** interval for frquency of logging */
     private final static int LOGGING_FREQUENCY = 4;
 
     /**
@@ -305,6 +322,9 @@ public class PortWindow {
         initializeContent();
     }
 
+    /**
+     * initializes content of window to get it ready for work
+     */
     public void initializeContent(){
         ShipManager.getInstance().initializeShipsQueue();
         Queue<Ship> shipQueue =  ShipManager.getInstance().getShipsQueue();
@@ -314,6 +334,9 @@ public class PortWindow {
         supplyCount.setText(new Integer(Port.getInstance().getStorage().getSupplyCount()).toString());
     }
 
+    /**
+     * updated ships in queue from object of ShipManager
+     */
     public void updateShipQueue(){
         shipList.removeAll();
         Queue<Ship> shipQueue =  ShipManager.getInstance().getShipsQueue();

@@ -6,16 +6,20 @@ import com.gv.port.ships.factory.ShipThreadFactory;
 import com.gv.port.ships.threads.ShipThreadDownloader;
 import com.gv.port.ships.threads.ShipThreadUnloader;
 import com.gv.port.ships.threads.ShipThreadUnloaderDownloader;
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
 
+/**
+ * represents interface and unites logic of whole ship module for other modules of app
+ */
 public class ShipManager {
 
+    /** initial capacity of priority queue */
     private static final int QUEUE_INITIAL_CAPACITY = 47;
 
-    private PriorityQueue<Ship> shipsQueue = new PriorityQueue<Ship>(QUEUE_INITIAL_CAPACITY, new Comparator<Ship>() {
+    /** priority queue for storing actual ships registered in queue of database */
+    private PriorityQueue<Ship> shipsQueue = new PriorityQueue<>(QUEUE_INITIAL_CAPACITY, new Comparator<Ship>() {
         public int compare(Ship s1, Ship s2) {
             if (s1.getPriority() > s2.getPriority())
             {
@@ -29,14 +33,18 @@ public class ShipManager {
         }
     });
 
+    /** single object of class */
     private static ShipManager INSTANCE = new ShipManager();
 
+    /** private basic constructor of class */
     private ShipManager(){}
 
+    /** returns single instance of class */
     public static ShipManager getInstance(){
         return INSTANCE;
     }
 
+    /** adds new ship to queue of ships and to remote database */
     public void addNewShip(long accessTime, int downloadSupplyCount, int unloadSupplyCount, int priority){
         int shipId = ShipDaoSingleton.getInstance().
                 addShipToQueue(accessTime, downloadSupplyCount, unloadSupplyCount, priority);
@@ -45,6 +53,10 @@ public class ShipManager {
         }
     }
 
+    /**
+     * deletes ship by ship id in local queue and remote database queue
+     * @param shipId
+     */
     public void deleteShip(int shipId){
         ShipDaoSingleton.getInstance().deleteShipFromQueue(shipId);
         for (Ship ship : shipsQueue){
@@ -54,6 +66,9 @@ public class ShipManager {
         }
     }
 
+    /**
+     * transforms ships objects into threads and adds them to @see PortAccessService
+     */
     public void lunchShipsInQueue(){
         while(!shipsQueue.isEmpty()){
             Ship ship = shipsQueue.poll();
@@ -74,6 +89,9 @@ public class ShipManager {
         }
     }
 
+    /**
+     * initializes local queue of ships from remote database queue
+     */
     public void initializeShipsQueue(){
         List<Ship> actualShips = ShipDaoSingleton.getInstance().getShipsQueue();
         for(Ship ship : actualShips){
@@ -81,6 +99,7 @@ public class ShipManager {
         }
     }
 
+    /** returns queue of ships */
     public PriorityQueue<Ship> getShipsQueue() {
         return shipsQueue;
     }

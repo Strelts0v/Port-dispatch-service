@@ -7,30 +7,50 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * provides methods for accessing remote database, retrieve and modify data
+ * realizes Singleton pattern
+ */
 public class ShipDaoSingleton implements ShipDao{
 
+    /** single object of class according Singleton pattern */
     private final static ShipDao INSTANCE = new ShipDaoSingleton();
 
+    /** name of column with ship id that stored in remote database */
     private final static String SHIP_ID_COLUMN_NAME = "ship_id";
 
+    /** name of column with priority id that stored in remote database */
     private final static String SHIP_PRIORITY_ID_COLUMN_NAME = "priority_id";
 
+    /** name of column with supply id that stored in remote database */
     private final static String SHIP_SUPPLY_ID_COLUMN_NAME = "supply_id";
 
+    /** name of column with ship access time that stored in remote database */
     private final static String SHIP_ACCESS_TIME_COLUMN_NAME = "access_time";
 
+    /** name of column with supply download count that stored in remote database */
     private final static String DOWNLOAD_SUPPLY_COUNT_COLUMN_NAME = "download_count";
 
+    /** name of column with supply unload count that stored in remote database */
     private final static String UNLOAD_SUPPLY_COUNT_COLUMN_NAME = "unload_count";
 
+    /** initial value for violations */
     private final static int INITIAL_VIOLATIONS_COUNT = 0;
 
+    /** private basic constructor of class */
     private ShipDaoSingleton(){}
 
+    /** returns single instance of class */
     public static ShipDao getInstance(){
         return INSTANCE;
     }
 
+
+    /**
+     * gets all ships from current queue in remote data storage.
+     * @return list of Ship objects
+     */
     public List<Ship> getShipsQueue() {
         List<Ship> actualShips = null;
         try {
@@ -56,6 +76,10 @@ public class ShipDaoSingleton implements ShipDao{
         }
     }
 
+    /**
+     * deletes ships by id from current queue, stored in remote database
+     * @param shipId - unique id of ship
+     */
     public void deleteShipFromQueue(int shipId) {
         try{
             Connection connection = DatabaseConnectionManager.getDatabaseConnection();
@@ -67,6 +91,14 @@ public class ShipDaoSingleton implements ShipDao{
         }
     }
 
+    /**
+     * adds new ship to queue in remote database
+     * @param accessTime - max access time for using dock
+     * @param downloadSupplyCount - count of supplies for downloading
+     * @param unloadSupplyCount - count of supplies for unloading
+     * @param priority - priority of ship in queue
+     * @return created id for new ship
+     */
     public int addShipToQueue(long accessTime, int downloadSupplyCount, int unloadSupplyCount, int priority) {
         int shipId = 0;
         try{
@@ -88,6 +120,12 @@ public class ShipDaoSingleton implements ShipDao{
         }
     }
 
+    /**
+     * gets download and unload supply count according supply id
+     * @param supplyId - unique identifier of supplies
+     * @return array of 2 numbers, first - download supply count,
+     * second - unload supply count
+     */
     private int[] getSuppliesCount(int supplyId) {
         int[] supplies = new int[2];
         try {
@@ -106,6 +144,11 @@ public class ShipDaoSingleton implements ShipDao{
         }
     }
 
+    /**
+     * registers ship in table with all ships in remote database
+     * @param accessTime - last access time of that ship
+     * @return return id of registered ship
+     */
     private int registerShip(long accessTime) {
         int shipId = 0;
         try{
@@ -126,6 +169,13 @@ public class ShipDaoSingleton implements ShipDao{
         }
     }
 
+    /**
+     * registers supplies of ship in remote database
+     * @param shipId - uniqie identifier of ship
+     * @param downloadSupplyCount - count of supplies for downloading
+     * @param unloadSupplyCount - count of supplies for unloading
+     * @return - supply id stored in remote database
+     */
     private int registerShipSupplies(int shipId, int downloadSupplyCount, int unloadSupplyCount) {
         int supply_id = 0;
         try{

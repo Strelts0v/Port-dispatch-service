@@ -10,9 +10,9 @@ public class ShipManagerTest {
 
     @Test
     public void addNewShipsTest() throws Exception {
-        ShipManager.getInstance().addNewShip(1, 31, 0, 1);
-        ShipManager.getInstance().addNewShip(2, 33, 33, 3);
-        ShipManager.getInstance().addNewShip(3, 0, 22, 2);
+        ShipManager.getInstance().addNewShip(4, 31, 0, 1);
+        ShipManager.getInstance().addNewShip(4, 33, 33, 3);
+        ShipManager.getInstance().addNewShip(4, 0, 22, 2);
 
         PriorityQueue<Ship> ships = ShipManager.getInstance().getShipsQueue();
         Assert.assertEquals(33 , ships.poll().getDownloadSupplyCount());
