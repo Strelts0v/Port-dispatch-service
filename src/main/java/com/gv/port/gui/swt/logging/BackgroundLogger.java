@@ -6,8 +6,18 @@ import com.gv.port.portStructure.Port;
 import com.gv.port.start.Main;
 import org.eclipse.swt.widgets.Display;
 
+/**
+ * designed as thread, that with specified period will check @see PortLogger class
+ * and print log info to the graphical user interface.
+ */
 public class BackgroundLogger implements Runnable{
 
+    private static int MAX_SHIP_COUNT_IN_DOCKS = 3;
+
+    /**
+     * Thread get access to swt gui elements in async mode and update log info
+     * according port business logic
+     */
     public void run() {
         Display.getDefault().asyncExec(new Runnable() {
             public void run() {
@@ -21,12 +31,10 @@ public class BackgroundLogger implements Runnable{
                 Main.getPortWindow().supplyCount.setText(
                         new Integer(Port.getInstance().getStorage().getSupplyCount()).toString());
                 Main.getPortWindow().lblShipInDock_1.setText(PortLogger.getShipIdInFirstDock());
-
                 Main.getPortWindow().lblShipInDock_2.setText((PortLogger.getShipIdInSecondDock()));
-
                 Main.getPortWindow().lblShipInDock_3.setText(PortLogger.getShipIdInThirdDock());
                 int count = Main.getPortWindow().shipList.getItemCount();
-                for(int i = 0; i < count && i < 3; i++) {
+                for(int i = 0; i < count && i < MAX_SHIP_COUNT_IN_DOCKS; i++) {
                     Main.getPortWindow().shipList.remove(0);
                     Main.getPortWindow().shipList.redraw();
                 }

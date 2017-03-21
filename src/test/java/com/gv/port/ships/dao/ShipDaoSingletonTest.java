@@ -22,15 +22,4 @@ public class ShipDaoSingletonTest {
         ShipDaoSingleton.getInstance().deleteShipFromQueue(shipId1);
         ShipDaoSingleton.getInstance().deleteShipFromQueue(shipId2);
     }
-
-    @Test
-    public void deleteShipFromQueue() throws Exception {
-
-    }
-
-    @Test
-    public void addShipToQueue() throws Exception {
-
-    }
-
 }
