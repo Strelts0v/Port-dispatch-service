@@ -18,9 +18,11 @@ public class PortTest {
         Dock dock1 = port.getDock(1);
         Dock dock2 = port.getDock(1);
         Dock dock3 = port.getDock(1);
+
         Assert.assertNotNull(dock1);
         Assert.assertNotNull(dock2);
         Assert.assertNotNull(dock3);
+
         port.returnDock(dock1);
         dock1 = port.getDock(1);
         Assert.assertNotNull(dock1);
