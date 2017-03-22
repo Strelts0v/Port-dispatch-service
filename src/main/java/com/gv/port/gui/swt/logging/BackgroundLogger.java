@@ -30,15 +30,14 @@ public class BackgroundLogger implements Runnable{
                 }
                 Main.getPortWindow().supplyCount.setText(
                         new Integer(Port.getInstance().getStorage().getSupplyCount()).toString());
-                Main.getPortWindow().lblShipInDock_1.setText(PortLogger.getShipIdInFirstDock());
-                Main.getPortWindow().lblShipInDock_2.setText((PortLogger.getShipIdInSecondDock()));
-                Main.getPortWindow().lblShipInDock_3.setText(PortLogger.getShipIdInThirdDock());
+                Main.getPortWindow().lblShipInDock_1.setText("ship id #" + PortLogger.getShipIdInFirstDock());
+                Main.getPortWindow().lblShipInDock_2.setText("ship id #" + PortLogger.getShipIdInSecondDock());
+                Main.getPortWindow().lblShipInDock_3.setText("ship id #" + PortLogger.getShipIdInThirdDock());
                 int count = Main.getPortWindow().shipList.getItemCount();
                 for(int i = 0; i < count && i < MAX_SHIP_COUNT_IN_DOCKS; i++) {
                     Main.getPortWindow().shipList.remove(0);
                     Main.getPortWindow().shipList.redraw();
                 }
-
             }
         });
     }

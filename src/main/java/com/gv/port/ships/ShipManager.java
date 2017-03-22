@@ -62,6 +62,7 @@ public class ShipManager {
         for (Ship ship : shipsQueue){
             if(ship.shipId == shipId){
                 shipsQueue.remove(ship);
+                ShipDaoSingleton.getInstance().deleteShipFromQueue(shipId);
             }
         }
     }
