@@ -1,0 +1,14 @@
+com.gv.port.database
+com.gv.port.gui.swt
+com.gv.port.gui.swt.logging
+com.gv.port.logging
+com.gv.port.portAccess
+com.gv.port.portStructure
+com.gv.port.portStructure.docks
+com.gv.port.portStructure.docks.exceptions
+com.gv.port.portStructure.storages
+com.gv.port.ships
+com.gv.port.ships.dao
+com.gv.port.ships.factory
+com.gv.port.ships.threads
+com.gv.port.start
